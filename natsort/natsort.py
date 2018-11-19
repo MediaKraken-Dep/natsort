@@ -13,11 +13,10 @@ from warnings import warn
 
 import natsort.compat.locale
 from natsort import utils
-from natsort.compat.py23 import py23_cmp, py23_str, u_format
+from natsort.compat.py23 import py23_cmp, py23_str
 from natsort.ns_enum import ns, ns_DUMB
 
 
-@u_format
 def decoder(encoding):
     """
     Return a function that can be used to decode bytes to unicode.
@@ -59,7 +58,6 @@ def decoder(encoding):
     return partial(utils.do_decoding, encoding=encoding)
 
 
-@u_format
 def as_ascii(s):
     """
     Function to decode an input with the ASCII codec, or return as-is.
@@ -83,7 +81,6 @@ def as_ascii(s):
     return utils.do_decoding(s, "ascii")
 
 
-@u_format
 def as_utf8(s):
     """
     Function to decode an input with the UTF-8 codec, or return as-is.
@@ -107,7 +104,6 @@ def as_utf8(s):
     return utils.do_decoding(s, "utf-8")
 
 
-@u_format
 def natsort_keygen(key=None, alg=ns.DEFAULT, **_kwargs):
     """
     Generate a key to sort strings and numbers naturally.
@@ -151,7 +147,7 @@ def natsort_keygen(key=None, alg=ns.DEFAULT, **_kwargs):
         >>> a = ['num5.10', 'num-3', 'num5.3', 'num2']
         >>> a.sort(key=natsort_keygen(alg=ns.REAL))
         >>> a
-        [{u}'num-3', {u}'num2', {u}'num5.10', {u}'num5.3']
+        ['num-3', 'num2', 'num5.10', 'num5.3']
 
     """
     # Transform old arguments to the ns enum.
@@ -219,7 +215,6 @@ natsort_keygen
 """
 
 
-@u_format
 def natsorted(seq, key=None, reverse=False, alg=ns.DEFAULT, **_kwargs):
     """
     Sorts an iterable naturally.
@@ -261,14 +256,13 @@ def natsorted(seq, key=None, reverse=False, alg=ns.DEFAULT, **_kwargs):
 
         >>> a = ['num3', 'num5', 'num2']
         >>> natsorted(a)
-        [{u}'num2', {u}'num3', {u}'num5']
+        ['num2', 'num3', 'num5']
 
     """
     key = natsort_keygen(key, alg, **_kwargs)
     return sorted(seq, reverse=reverse, key=key)
 
 
-@u_format
 def versorted(seq, key=None, reverse=False, alg=ns.DEFAULT, **_kwargs):
     """
     Identical to :func:`natsorted`.
@@ -287,7 +281,6 @@ def versorted(seq, key=None, reverse=False, alg=ns.DEFAULT, **_kwargs):
     return natsorted(seq, key, reverse, alg, **_kwargs)
 
 
-@u_format
 def humansorted(seq, key=None, reverse=False, alg=ns.DEFAULT):
     """
     Convenience function to properly sort non-numeric characters.
@@ -332,15 +325,14 @@ def humansorted(seq, key=None, reverse=False, alg=ns.DEFAULT):
 
         >>> a = ['Apple', 'Banana', 'apple', 'banana']
         >>> natsorted(a)
-        [{u}'Apple', {u}'Banana', {u}'apple', {u}'banana']
+        ['Apple', 'Banana', 'apple', 'banana']
         >>> humansorted(a)
-        [{u}'apple', {u}'Apple', {u}'banana', {u}'Banana']
+        ['apple', 'Apple', 'banana', 'Banana']
 
     """
     return natsorted(seq, key, reverse, alg | ns.LOCALE)
 
 
-@u_format
 def realsorted(seq, key=None, reverse=False, alg=ns.DEFAULT):
     """
     Convenience function to properly sort signed floats.
@@ -386,15 +378,14 @@ def realsorted(seq, key=None, reverse=False, alg=ns.DEFAULT):
 
         >>> a = ['num5.10', 'num-3', 'num5.3', 'num2']
         >>> natsorted(a)
-        [{u}'num2', {u}'num5.3', {u}'num5.10', {u}'num-3']
+        ['num2', 'num5.3', 'num5.10', 'num-3']
         >>> realsorted(a)
-        [{u}'num-3', {u}'num2', {u}'num5.10', {u}'num5.3']
+        ['num-3', 'num2', 'num5.10', 'num5.3']
 
     """
     return natsorted(seq, key, reverse, alg | ns.REAL)
 
 
-@u_format
 def index_natsorted(seq, key=None, reverse=False, alg=ns.DEFAULT, **_kwargs):
     """
     Determine the list of the indexes used to sort the input sequence.
@@ -446,9 +437,9 @@ def index_natsorted(seq, key=None, reverse=False, alg=ns.DEFAULT, **_kwargs):
         [2, 0, 1]
         >>> # Sort both lists by the sort order of a
         >>> order_by_index(a, index)
-        [{u}'num2', {u}'num3', {u}'num5']
+        ['num2', 'num3', 'num5']
         >>> order_by_index(b, index)
-        [{u}'baz', {u}'foo', {u}'bar']
+        ['baz', 'foo', 'bar']
 
     """
     if key is None:
@@ -464,7 +455,6 @@ def index_natsorted(seq, key=None, reverse=False, alg=ns.DEFAULT, **_kwargs):
     return [x for x, _ in index_seq_pair]
 
 
-@u_format
 def index_versorted(seq, key=None, reverse=False, alg=ns.DEFAULT, **_kwargs):
     """
     Identical to :func:`index_natsorted`.
@@ -483,7 +473,6 @@ def index_versorted(seq, key=None, reverse=False, alg=ns.DEFAULT, **_kwargs):
     return index_natsorted(seq, key, reverse, alg, **_kwargs)
 
 
-@u_format
 def index_humansorted(seq, key=None, reverse=False, alg=ns.DEFAULT):
     """
     This is a wrapper around ``index_natsorted(seq, alg=ns.LOCALE)``.
@@ -533,7 +522,6 @@ def index_humansorted(seq, key=None, reverse=False, alg=ns.DEFAULT):
     return index_natsorted(seq, key, reverse, alg | ns.LOCALE)
 
 
-@u_format
 def index_realsorted(seq, key=None, reverse=False, alg=ns.DEFAULT):
     """
     This is a wrapper around ``index_natsorted(seq, alg=ns.REAL)``.
@@ -580,7 +568,6 @@ def index_realsorted(seq, key=None, reverse=False, alg=ns.DEFAULT):
 
 
 # noinspection PyShadowingBuiltins,PyUnresolvedReferences
-@u_format
 def order_by_index(seq, index, iter=False):
     """
     Order a given sequence by an index sequence.
@@ -632,9 +619,9 @@ def order_by_index(seq, index, iter=False):
         [2, 0, 1]
         >>> # Sort both lists by the sort order of a
         >>> order_by_index(a, index)
-        [{u}'num2', {u}'num3', {u}'num5']
+        ['num2', 'num3', 'num5']
         >>> order_by_index(b, index)
-        [{u}'baz', {u}'foo', {u}'bar']
+        ['baz', 'foo', 'bar']
 
     """
     return (seq[i] for i in index) if iter else [seq[i] for i in index]

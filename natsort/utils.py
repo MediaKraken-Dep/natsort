@@ -55,7 +55,6 @@ from natsort.compat.py23 import (
     py23_filter,
     py23_map,
     py23_str,
-    u_format,
 )
 from natsort.ns_enum import ns, ns_DUMB
 from natsort.unicode_numbers import digits_no_decimals, numeric_no_decimals
@@ -635,7 +634,6 @@ lower_function = methodcaller("casefold" if NEWPY else "lower")
 
 
 # noinspection PyIncorrectDocstring
-@u_format
 def groupletters(x, _low=lower_function):
     """
     Double all characters, making doubled letters lowercase.
@@ -652,7 +650,7 @@ def groupletters(x, _low=lower_function):
     --------
 
         >>> groupletters("Apple")
-        {u}'aAppppllee'
+        'aAppppllee'
 
     """
     return "".join(ichain.from_iterable((_low(y), y) for y in x))
@@ -719,7 +717,6 @@ def do_decoding(s, encoding):
 
 
 # noinspection PyIncorrectDocstring
-@u_format
 def path_splitter(s, _d_match=re.compile(r"\.\d").match):
     """
     Split a string into its path components.
@@ -739,7 +736,7 @@ def path_splitter(s, _d_match=re.compile(r"\.\d").match):
     --------
 
         >>> tuple(path_splitter("/this/thing.ext"))
-        ({u}'/', {u}'this', {u}'thing', {u}'.ext')
+        ('/', 'this', 'thing', '.ext')
 
     """
     if not isinstance(s, PurePath):
