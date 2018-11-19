@@ -7,7 +7,6 @@ See the README or the natsort homepage for more details.
 import pytest
 from natsort import natsort_key, natsort_keygen, natsorted, ns
 from natsort.compat.locale import get_strxfrm, null_string_locale
-from natsort.compat.py23 import PY_VERSION
 
 
 @pytest.fixture
@@ -92,7 +91,6 @@ def test_natsort_keygen_handles_arbitrary_input(arbitrary_input, alg, expected):
         (ns.PATH | ns.GROUPLETTERS, ((b"6A-5.034e+1",),)),
     ],
 )
-@pytest.mark.skipif(PY_VERSION < 3.0, reason="special bytes handling only on Python3")
 def test_natsort_keygen_handles_bytes_input(bytes_input, alg, expected):
     ns_key = natsort_keygen(alg=alg)
     assert ns_key(bytes_input) == expected
@@ -158,7 +156,6 @@ def test_natsort_keygen_with_locale(mocker, arbitrary_input, alg, expected, is_d
     "alg, is_dumb",
     [(ns.LOCALE, False), (ns.LOCALE, True), (ns.LOCALE | ns.CAPITALFIRST, False)],
 )
-@pytest.mark.skipif(PY_VERSION < 3.0, reason="special bytes handling only on Python3")
 @pytest.mark.usefixtures("with_locale_en_us")
 def test_natsort_keygen_with_locale_bytes(mocker, bytes_input, alg, is_dumb):
     expected = (b"6A-5.034e+1",)

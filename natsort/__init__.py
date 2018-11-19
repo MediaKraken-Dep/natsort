@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import sys
 import warnings
 
 from natsort.natsort import (
@@ -22,9 +21,6 @@ from natsort.natsort import (
 )
 from natsort.utils import chain_functions
 
-if float(sys.version[:3]) < 3:
-    from natsort.natsort import natcmp
-
 __version__ = "5.5.0"
 
 __all__ = [
@@ -40,7 +36,6 @@ __all__ = [
     "index_realsorted",
     "order_by_index",
     "decoder",
-    "natcmp",
     "as_ascii",
     "as_utf8",
     "ns",

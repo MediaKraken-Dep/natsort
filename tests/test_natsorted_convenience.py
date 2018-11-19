@@ -22,7 +22,6 @@ from natsort import (
     realsorted,
     versorted,
 )
-from natsort.compat.py23 import PY_VERSION
 
 
 @pytest.fixture
@@ -46,15 +45,9 @@ def test_decoder_returns_function_that_can_decode_bytes_but_return_non_bytes_as_
     int_obj = 14
     assert func(b"bytes") == str_obj
     assert func(int_obj) is int_obj  # returns as-is, same object ID
-    if PY_VERSION >= 3:
-        assert (
-            func(str_obj) is str_obj
-        )  # same object returned on Python3 b/c only bytes has decode
-    else:
-        assert func(str_obj) is not str_obj
-        assert (
-            func(str_obj) == str_obj
-        )  # not same object on Python2 because str can decode
+    assert (
+        func(str_obj) is str_obj
+    )  # same object returned b/c only bytes has decode
 
 
 def test_as_ascii_converts_bytes_to_ascii():
